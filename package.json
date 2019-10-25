@@ -1,0 +1,26 @@
+{
+  "name": "github-access",
+  "version": "1.0.0",
+  "description": "a simple js program to query the github api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ciarancoady98/Github-Access.git"
+  },
+  "keywords": [
+    "github",
+    "api"
+  ],
+  "author": "Ciaran Coady",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ciarancoady98/Github-Access/issues"
+  },
+  "homepage": "https://github.com/ciarancoady98/Github-Access#readme",
+  "dependencies": {
+    "octonode": "^0.9.5"
+  }
+}

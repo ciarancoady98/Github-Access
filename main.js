@@ -1,16 +1,17 @@
+const password = require('./password');
 const mariadb = require('mariadb');
 const pool = mariadb.createPool({
      host: 'localhost', 
      user:'nodeserver', 
-     password: 'nodeserver',
+     password: password,
      connectionLimit: 5
 });
 
 pool.getConnection()
     .then(conn => { 
       conn.query("use githubaccess")
-          .then((whatIsReturned) => {
-            console.log(whatIsReturned);
+          .then((result) => {
+            console.log(result);
           })
           .catch(err => {
           //output error to console

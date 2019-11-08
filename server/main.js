@@ -3,9 +3,6 @@ const mariadb = require('mariadb');
 const github = require('octonode');
 var standard_input = process.stdin;
 
-
-
-
 /*
   Setup a connection to the database to store
   the results of our queries
@@ -35,9 +32,6 @@ pool.getConnection()
       console.log(err);
     });
 
-
-
-
 /*
     Setup a client so we can query the github rest api
     Currently no authentication
@@ -58,16 +52,15 @@ client.limit(function (err, left, max, reset) {
   console.log(reset);  // 1372700873 (UTC epoch seconds)
 });
 
-
-
-
 /*
   Handling user input from the console
 */
+let githubusername;
+let githubpassword;
 // Set input character encoding.
 standard_input.setEncoding('utf-8');
 // Prompt user to input data in console.
-console.log("Please input text in command line.");
+console.log("Please input your github username in the command line.");
 // When user input data and click enter key.
 standard_input.on('data', function (data) {
     // User input exit.

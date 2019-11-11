@@ -1,10 +1,30 @@
 const password = require('./password');
 const mariadb = require('mariadb');
 const github = require('octonode');
-var standard_input = process.stdin;
+var readline = require('readline');
 
+/* Get the git password from stdin */
+var ioStream = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+/* Confifure console output to no show passwords in plain text */
+ioStream.stdoutMuted = true;
+ioStream._writeToOutput = function _writeToOutput(stringToWrite) {
+  if (ioStream.stdoutMuted)
+    ioStream.output.write("*");
+  else
+    ioStream.output.write(stringToWrite);
+};
+ioStream.stdoutMuted = false;
+ioStream.question('Please enter the github password for current user : ', function(password) {
+  loginGitUser(password);
+  ioStream.close();
+});
 
-
+function loginGitUser(password){
+  console.log("You entered : " + password);
+}
 
 /*
   Setup a connection to the database to store
@@ -35,49 +55,34 @@ pool.getConnection()
       console.log(err);
     });
 
-
-
-
 /*
     Setup a client so we can query the github rest api
     Currently no authentication
 */
 /*
-var client = github.client({
-  username: 'user',
-  password: 'password'
-});
-*/
+Build a client that has access to public data
+
 var client = github.client();
 client.get('/users/pksunkara', {}, function (err, status, body, headers) {
   console.log(body); //json object
 });
-client.limit(function (err, left, max, reset) {
-  console.log(left); // 4999
-  console.log(max);  // 5000
-  console.log(reset);  // 1372700873 (UTC epoch seconds)
+*/
+/*
+Build a client from an access token
+
+var client = github.client('someaccesstoken');
+
+client.get('/user', {}, function (err, status, body, headers) {
+  console.log(body); //json object
 });
 
-
-
+*/
 
 /*
-  Handling user input from the console
-*/
-// Set input character encoding.
-standard_input.setEncoding('utf-8');
-// Prompt user to input data in console.
-console.log("Please input text in command line.");
-// When user input data and click enter key.
-standard_input.on('data', function (data) {
-    // User input exit.
-    if(data === 'exit\n'){
-        // Program exit.
-        console.log("User input complete, program exit.");
-        process.exit();
-    }else
-    {
-        // Print user input in console.
-        console.log('User Input Data : ' + data);
-    }
+build a client from credentials
+
+var client = github.client({
+  username: 'pksunkara',
+  password: 'password'
 });
+*/

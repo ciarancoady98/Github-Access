@@ -1,22 +1,22 @@
 const mariadb = require("mariadb");
 const inquirer = require("./inquirer");
-/*
-  Setup a connection to the database to store
-  the results of our queries
-*/
 
 module.exports = {
+  /*
+  Setup a connection to the database to store
+  the results of our queries
+  */
   serverLogin: async () => {
     const sqlCredentials = await inquirer.askSqlCredentials();
-    console.log(sqlCredentials);
-
     const pool = mariadb.createPool({
       host: "localhost",
       user: sqlCredentials.username,
       password: sqlCredentials.password,
       connectionLimit: 5
     });
-
+    return pool;
+  },
+  makeQuery: async pool => {
     pool
       .getConnection()
       .then(conn => {

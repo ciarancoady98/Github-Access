@@ -1,3 +1,7 @@
+const github = require("octonode");
+const inquirer = require("./inquirer");
+const CLI = require("clui");
+const Spinner = CLI.Spinner;
 /*
     Setup a client so we can query the github rest api
     Currently no authentication
@@ -29,3 +33,20 @@ var client = github.client({
   password: 'password'
 });
 */
+module.exports = {
+  buildGitClient: async () => {
+    const credentials = await inquirer.askGithubCredentials();
+    var client = github.client({
+      username: credentials.username,
+      password: credentials.password
+    });
+    console.log("Successfully created git client");
+    return client;
+  },
+
+  makeGitRequest: async client => {
+    client.get("/user", {}, function(err, status, body, headers) {
+      console.log(body); //json object
+    });
+  }
+};

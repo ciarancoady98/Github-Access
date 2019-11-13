@@ -11,10 +11,12 @@ console.log(
   )
 );
 
-const inquirer  = require('./src/git');
+const inquirer  = require('./src/inquirer');
 const run = async () => {
-  const credentials = await inquirer.askGithubCredentials();
-  console.log(credentials);
+  const gitCredentials = await inquirer.askGithubCredentials();
+  console.log(gitCredentials);
+  const sqlCredentials = await inquirer.askSqlCredentials();
+  console.log(sqlCredentials);
 };
 run();
 

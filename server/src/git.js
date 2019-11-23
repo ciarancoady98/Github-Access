@@ -11,7 +11,7 @@ status.stop();
 
 module.exports = {
   //Setup a client so we can query the github rest api
-  buildGitClient: async () => {
+  buildLoggedInGitClient: async () => {
     const credentials = await inquirer.askGithubCredentials();
     var client = github.client({
       username: credentials.username,
@@ -20,15 +20,48 @@ module.exports = {
     console.log("Successfully created git client");
     return client;
   },
+  //Setup a client so we can query the github rest api
+  buildGitClient: async () => {
+    var client = github.client();
+    console.log("Successfully created git client");
+    return client;
+  },
   //Make a simple request to get current signed in users data
-  makeGitRequest: async client => {
-    client.get("/user", {}, function(err, status, body, headers) {
+  getUserDetails: async (client, username) => {
+    client.get("/users/" + username, {}, function(err, status, body, headers) {
       console.log(body); //json object
     });
   },
-  //Make a request to get the logged in users followers
-  getFollowers: async client => {
-    client.get("/user/followers", {}, function(err, status, body, headers) {
+  //Make a request to get a users followers
+  getFollowers: async (client, username) => {
+    client.get("/users/" + username + "/followers", {}, function(
+      err,
+      status,
+      body,
+      headers
+    ) {
+      console.log(body); //json object
+    });
+  },
+  //Make a request to get a users repos
+  getRepos: async (client, username) => {
+    client.get("/users/" + username + "/repos", {}, function(
+      err,
+      status,
+      body,
+      headers
+    ) {
+      console.log(body); //json object
+    });
+  },
+  //Make a request to get a repos commits
+  getCommits: async (client, username, reponame) => {
+    client.get("/repos/" + username + "/" + reponame + "/commits", {}, function(
+      err,
+      status,
+      body,
+      headers
+    ) {
       console.log(body); //json object
     });
   }

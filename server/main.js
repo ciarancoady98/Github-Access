@@ -12,12 +12,12 @@ async function start() {
 
   //setGithubCredentials
   var githubClient = await github.buildGitClient();
-  //make an api call
-  await github.makeGitRequest(githubClient);
   //login to sql server
   var connectionPool = await sql.serverLogin();
   //make a query to switch to the desired table
-  sql.makeQuery(connectionPool);
+  await sql.makeQuery(connectionPool);
+  //make an api call
+  await github.getFollowers(githubClient);
 }
 
 start();

@@ -25,5 +25,11 @@ module.exports = {
     client.get("/user", {}, function(err, status, body, headers) {
       console.log(body); //json object
     });
+  },
+  //Make a request to get the logged in users followers
+  getFollowers: async client => {
+    client.get("/user/followers", {}, function(err, status, body, headers) {
+      console.log(body); //json object
+    });
   }
 };

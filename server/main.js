@@ -3,6 +3,7 @@ const figlet = require("figlet");
 const github = require("./src/git");
 const sql = require("./src/sql");
 const inquirer = require("./src/inquirer");
+const parser = require("./src/parser");
 
 //Mainline
 async function start() {
@@ -46,12 +47,13 @@ async function start() {
   await github
     .getRepos(githubClient, userdetails.username)
     .then(success => {
-      console.log(success);
+      repoNames = parser.parseFollowers(success);
     })
     .catch(error => {
       console.log(error);
     });
 
+  console.log(repoNames);
   //get followers returns a json containing
   //status: 200, [{ login: "username1" }, { login: "username2" }];
 

@@ -42,7 +42,7 @@ async function start() {
       console.log(error);
     });
 
-  //get the users repos and save the repo names
+  //get the users repos and save the repo names!
   let repoNames = null;
   await github
     .getRepos(githubClient, userdetails.username)

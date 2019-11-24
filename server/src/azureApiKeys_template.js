@@ -1,2 +1,6 @@
-export let endpoint = "";
-export let key = "";
+let endpoint = "";
+let key = "";
+module.exports = {
+  endpoint: endpoint,
+  key: key
+};

@@ -11,7 +11,7 @@ async function start() {
     chalk.yellow(figlet.textSync("Github Access", { horizontalLayout: "full" }))
   );
 
-  //setGithubCredentials
+  //Build a github client
   let githubClient = null;
   await github
     .buildGitClient()
@@ -20,14 +20,15 @@ async function start() {
         console.log("A github client was created successfully");
         githubClient = success;
       } else
-        throw "i'm afraid something has gone horribly wrong! no client for you!";
+        throw "I'm afraid something has gone horribly wrong! No client for you!";
     })
     .catch(error => {
       console.log(error);
     });
+
   //login to sql server
   //var connectionPool = await sql.serverLogin();
-  console.log(githubClient);
+
   //Ask the user for the base user they wish to analyse
   let userdetails;
   await inquirer
@@ -37,10 +38,23 @@ async function start() {
       userdetails = ruserdetails;
     })
     .catch(error => {
-      console.log("oh no an error occured!");
+      console.log(error);
     });
+
   //get the users repos and save the repo names
-  github.getFollowers(githubClient, userdetails.username);
+  let repoNames = null;
+  await github
+    .getRepos(githubClient, userdetails.username)
+    .then(success => {
+      console.log(success);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+
+  //get followers returns a json containing
+  //status: 200, [{ login: "username1" }, { login: "username2" }];
+
   //get all the commits for each repo
   //pretty print the users details along with all their repos and commits
 

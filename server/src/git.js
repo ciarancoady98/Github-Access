@@ -21,58 +21,53 @@ module.exports = {
   },
   //Setup a generic client so we can query the github rest api
   buildGitClient: async () => {
-    try {
-      throw "we've shit the bed!";
-      var client = github.client();
-      return client;
-    } catch (error) {
-      console.log("an error occured while trying to create the github client");
-      return null;
-    } finally {
-      console.log("buildGitClient() ran");
-    }
+    var client = github.client();
+    return client;
   },
   //Make a simple request to get current signed in users data
   getUserDetails: async (client, username) => {
-    let userdetails = null;
-    client.get("/users/" + username, {}, function(err, status, body, headers) {
-      userdetails = { username: body.login, userid: body.id };
-      console.log(userdetails); //json object
+    return new Promise(resolve => {
+      client.get("/users/" + username, (err, status, body, headers) => {
+        //console.log("we are resolving the promise");
+        let userdetails = { username: body.login, userid: body.id };
+        resolve(userdetails);
+      });
     });
-    return userdetails;
   },
   //Make a request to get a users followers
   getFollowers: async (client, username) => {
-    client.get("/users/" + username + "/followers", {}, function(
-      err,
-      status,
-      body,
-      headers
-    ) {
-      console.log("status: " + status);
-      console.log(body); //json object
+    return new Promise(resolve => {
+      client.get(
+        "/users/" + username + "/followers",
+        (err, status, body, headers) => {
+          //console.log("we are resolving the promise");
+          resolve(body);
+        }
+      );
     });
   },
   //Make a request to get a users repos
   getRepos: async (client, username) => {
-    client.get("/users/" + username + "/repos", {}, function(
-      err,
-      status,
-      body,
-      headers
-    ) {
-      console.log(body); //json object
+    return new Promise(resolve => {
+      client.get(
+        "/users/" + username + "/repos",
+        (err, status, body, headers) => {
+          //console.log("we are resolving the promise");
+          resolve(body);
+        }
+      );
     });
   },
   //Make a request to get a repos commits
   getCommits: async (client, username, reponame) => {
-    client.get("/repos/" + username + "/" + reponame + "/commits", {}, function(
-      err,
-      status,
-      body,
-      headers
-    ) {
-      console.log(body); //json object
+    return new Promise(resolve => {
+      client.get(
+        "/repos/" + username + "/" + reponame + "/commits",
+        (err, status, body, headers) => {
+          //console.log("we are resolving the promise");
+          resolve(body);
+        }
+      );
     });
   }
 };

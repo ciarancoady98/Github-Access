@@ -58,5 +58,22 @@ module.exports = {
       }
     ];
     return inquirer.prompt(questions);
+  },
+  askForInitialUsername: () => {
+    const questions = [
+      {
+        name: "username",
+        type: "input",
+        message: "Please enter the username you wish to start analysis from:",
+        validate: function(value) {
+          if (value.length) {
+            return true;
+          } else {
+            return "Please a username.";
+          }
+        }
+      }
+    ];
+    return inquirer.prompt(questions);
   }
 };

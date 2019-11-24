@@ -10,27 +10,36 @@ status.stop();
 */
 
 module.exports = {
-  //Setup a client so we can query the github rest api
+  //Setup a logged in client so we can query the github rest api
   buildLoggedInGitClient: async () => {
     const credentials = await inquirer.askGithubCredentials();
     var client = github.client({
       username: credentials.username,
       password: credentials.password
     });
-    console.log("Successfully created git client");
     return client;
   },
-  //Setup a client so we can query the github rest api
+  //Setup a generic client so we can query the github rest api
   buildGitClient: async () => {
-    var client = github.client();
-    console.log("Successfully created git client");
-    return client;
+    try {
+      throw "we've shit the bed!";
+      var client = github.client();
+      return client;
+    } catch (error) {
+      console.log("an error occured while trying to create the github client");
+      return null;
+    } finally {
+      console.log("buildGitClient() ran");
+    }
   },
   //Make a simple request to get current signed in users data
   getUserDetails: async (client, username) => {
+    let userdetails = null;
     client.get("/users/" + username, {}, function(err, status, body, headers) {
-      console.log(body); //json object
+      userdetails = { username: body.login, userid: body.id };
+      console.log(userdetails); //json object
     });
+    return userdetails;
   },
   //Make a request to get a users followers
   getFollowers: async (client, username) => {
@@ -40,6 +49,7 @@ module.exports = {
       body,
       headers
     ) {
+      console.log("status: " + status);
       console.log(body); //json object
     });
   },

@@ -48,17 +48,30 @@ async function start() {
     .getRepos(githubClient, userdetails.username)
     .then(success => {
       repoNames = parser.parseFollowers(success);
+      console.log("Successfully parsed " + userdetails.username + "'s repos");
     })
     .catch(error => {
       console.log(error);
     });
 
-  console.log(repoNames);
+  //get all the commits for each repo
+  //[{commit: {message: "de message"}
+  //  author: {login: "ciarancoady98"}
+  //}]
+
+  await github
+    .getCommits(githubClient, userdetails.username, "The-Turing-Game")
+    .then(success => {
+      parser.parseRepoCommits(success);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+
+  //pretty print the users details along with all their repos and commits
+
   //get followers returns a json containing
   //status: 200, [{ login: "username1" }, { login: "username2" }];
-
-  //get all the commits for each repo
-  //pretty print the users details along with all their repos and commits
 
   //we are going to make a graph where every node is either a user or a commit, each user will be coloured blue, each commit will be coloured from green to red depending on sentiment
   //get the users followers

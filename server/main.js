@@ -4,6 +4,7 @@ const github = require("./src/git");
 const sql = require("./src/sql");
 const inquirer = require("./src/inquirer");
 const parser = require("./src/parser");
+const diskAccess = require("./src/diskAccess");
 const CLI = require("clui");
 const Spinner = CLI.Spinner;
 
@@ -38,7 +39,8 @@ async function fetchUserInfo(githubClient, username) {
         console.log(error);
       });
   }
-  console.log(userInfo);
+  //console.log(userInfo);
+  return userInfo;
 }
 
 //Mainline
@@ -78,9 +80,12 @@ async function start() {
       console.log(error);
     });
 
-  github.checkRateLimit(githubClient);
+  //github.checkRateLimit(githubClient);
+  let userInfo = await fetchUserInfo(githubClient, userdetails.username);
+  let userInfoString = JSON.stringify(userInfo);
+  await diskAccess.writeToFile(userInfoString);
 
-  //await fetchUserInfo(githubClient, userdetails.username);
+  console.log("me annoying");
   //pretty print the users details along with all their repos and commits
 
   //get followers returns a json containing

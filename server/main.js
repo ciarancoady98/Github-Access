@@ -4,6 +4,42 @@ const github = require("./src/git");
 const sql = require("./src/sql");
 const inquirer = require("./src/inquirer");
 const parser = require("./src/parser");
+const CLI = require("clui");
+const Spinner = CLI.Spinner;
+
+//This function will get all the repos and commit messages for a given user
+async function fetchUserInfo(githubClient, username) {
+  //get the users repos and save the repo names
+  let repoNames = [];
+  await github
+    .getRepos(githubClient, username)
+    .then(success => {
+      repoNames = parser.parseFollowers(success);
+      console.log("Successfully parsed " + username + "'s repos");
+    })
+    .catch(error => {
+      console.log(error);
+    });
+
+  //get all the commits for each repo
+  //[{commit: {message: "de message"}
+  //  author: {login: "ciarancoady98"}
+  //}]
+  let userInfo = { repoNames: [], repoCommits: [] };
+
+  for (let i = 0; i < repoNames.length; i++) {
+    await github
+      .getCommits(githubClient, username, repoNames[i])
+      .then(success => {
+        userInfo.repoNames.push(repoNames[i]);
+        userInfo.repoCommits.push(parser.parseRepoCommits(success, username));
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+  console.log(userInfo);
+}
 
 //Mainline
 async function start() {
@@ -15,7 +51,7 @@ async function start() {
   //Build a github client
   let githubClient = null;
   await github
-    .buildGitClient()
+    .buildLoggedInGitClient()
     .then(success => {
       if (success != null) {
         console.log("A github client was created successfully");
@@ -42,33 +78,9 @@ async function start() {
       console.log(error);
     });
 
-  //get the users repos and save the repo names!
-  let repoNames = [];
-  await github
-    .getRepos(githubClient, userdetails.username)
-    .then(success => {
-      repoNames = parser.parseFollowers(success);
-      console.log("Successfully parsed " + userdetails.username + "'s repos");
-    })
-    .catch(error => {
-      console.log(error);
-    });
+  github.checkRateLimit(githubClient);
 
-  //get all the commits for each repo
-  //[{commit: {message: "de message"}
-  //  author: {login: "ciarancoady98"}
-  //}]
-  for (var i = 0; i < repoNames.length; i++) {
-    await github
-      .getCommits(githubClient, userdetails.username, repoNames[i])
-      .then(success => {
-        console.log(parser.parseRepoCommits(success, userdetails.username));
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }
-
+  //await fetchUserInfo(githubClient, userdetails.username);
   //pretty print the users details along with all their repos and commits
 
   //get followers returns a json containing

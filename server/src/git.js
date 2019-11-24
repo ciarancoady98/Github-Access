@@ -1,6 +1,10 @@
 const github = require("octonode");
 const inquirer = require("./inquirer");
-
+const CLI = require("clui");
+const Spinner = CLI.Spinner;
+let status = new Spinner(
+  "We were too speedy! time to wait for the api to stop being salty..."
+);
 /*
 const CLI = require("clui");
 const Spinner = CLI.Spinner;
@@ -9,10 +13,30 @@ status.start();
 status.stop();
 */
 
+//Authenticate login to increase rate limit
+async function authLogin(credentials) {
+  return new Promise(resolve => {
+    var scopes = {
+      scopes: ["user", "repo"],
+      note: "Github access a command line git trawling tool"
+    };
+    github.auth
+      .config({
+        username: credentials.username,
+        password: credentials.password
+      })
+      .login(scopes, function(err, id, token, headers) {
+        console.log(id, token);
+        resolve();
+      });
+  });
+}
+
 module.exports = {
   //Setup a logged in client so we can query the github rest api
   buildLoggedInGitClient: async () => {
     const credentials = await inquirer.askGithubCredentials();
+    await authLogin(credentials);
     var client = github.client({
       username: credentials.username,
       password: credentials.password
@@ -68,6 +92,29 @@ module.exports = {
           resolve(body);
         }
       );
+    });
+  },
+  checkRateLimit: async client => {
+    return new Promise(resolve => {
+      client.limit((err, left, max, reset) => {
+        console.log("left : " + left); // 4999
+        console.log("max : " + max); // 5000
+        console.log(
+          "reset time: " + (new Date(reset * 1000) - new Date()) + "ms"
+        );
+        if (left == 0) {
+          let delayInMilliseconds = new Date(reset * 1000) - new Date();
+          console.log("we must wait " + delayInMilliseconds + "ms");
+          console.log("waiting ......");
+          new Promise(resolve => {
+            setTimeout(() => {
+              console.log("we've timed out");
+              resolve();
+            }, delayInMilliseconds);
+          });
+        }
+        resolve();
+      });
     });
   }
 };

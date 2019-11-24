@@ -43,7 +43,7 @@ async function start() {
     });
 
   //get the users repos and save the repo names!
-  let repoNames = null;
+  let repoNames = [];
   await github
     .getRepos(githubClient, userdetails.username)
     .then(success => {
@@ -58,15 +58,16 @@ async function start() {
   //[{commit: {message: "de message"}
   //  author: {login: "ciarancoady98"}
   //}]
-
-  await github
-    .getCommits(githubClient, userdetails.username, "The-Turing-Game")
-    .then(success => {
-      parser.parseRepoCommits(success);
-    })
-    .catch(error => {
-      console.log(error);
-    });
+  for (var i = 0; i < repoNames.length; i++) {
+    await github
+      .getCommits(githubClient, userdetails.username, repoNames[i])
+      .then(success => {
+        console.log(parser.parseRepoCommits(success, userdetails.username));
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
 
   //pretty print the users details along with all their repos and commits
 

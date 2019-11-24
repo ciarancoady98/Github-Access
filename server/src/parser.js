@@ -5,7 +5,7 @@ module.exports = {
       let listOfRepoNames = [];
       for (let i = 0; i < rawRepos.length; i++) {
         let repo = rawRepos[i];
-        listOfRepoNames.push(repo.full_name);
+        listOfRepoNames.push(repo.name);
         //console.log(repo.full_name);
       }
       return listOfRepoNames;
@@ -13,21 +13,24 @@ module.exports = {
       throw "Cannot parse an empty json";
     }
   },
-  parseRepoCommits: rawCommits => {
+  parseRepoCommits: (rawCommits, username) => {
     if (rawCommits != null) {
+      let commitMessages = [];
       for (let i = 0; i < rawCommits.length; i++) {
         let commit = rawCommits[i];
         if (commit != null) {
           try {
-            console.log("----------------------------------------");
-            console.log("username: " + commit.author.login);
-            console.log("commit message: " + commit.commit.message);
-            console.log("----------------------------------------");
+            let author = commit.author.login;
+            let message = commit.commit.message;
+            if (author == username && message != null) {
+              commitMessages.push(message);
+            }
           } catch (e) {
             console.log(e);
           }
         }
       }
+      return commitMessages;
     } else {
       throw "Cannot parse an empty json";
     }

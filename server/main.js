@@ -16,7 +16,7 @@ async function fetchUserInfo(githubClient, username) {
   await github
     .getRepos(githubClient, username)
     .then(success => {
-      repoNames = parser.parseFollowers(success);
+      repoNames = parser.parseRepos(success);
       console.log("Successfully parsed " + username + "'s repos");
     })
     .catch(error => {
@@ -51,45 +51,45 @@ async function start() {
     chalk.yellow(figlet.textSync("Github Access", { horizontalLayout: "full" }))
   );
 
-  // //Build a github client
-  // let githubClient = null;
-  // await github
-  //   .buildLoggedInGitClient()
-  //   .then(success => {
-  //     if (success != null) {
-  //       console.log("A github client was created successfully");
-  //       githubClient = success;
-  //     } else
-  //       throw "I'm afraid something has gone horribly wrong! No client for you!";
-  //   })
-  //   .catch(error => {
-  //     console.log(error);
-  //   });
+  //Build a github client
+  let githubClient = null;
+  await github
+    .buildLoggedInGitClient()
+    .then(success => {
+      if (success != null) {
+        console.log("A github client was created successfully");
+        githubClient = success;
+      } else
+        throw "I'm afraid something has gone horribly wrong! No client for you!";
+    })
+    .catch(error => {
+      console.log(error);
+    });
 
-  // //login to sql server
-  // //var connectionPool = await sql.serverLogin();
+  //login to sql server
+  //var connectionPool = await sql.serverLogin();
 
-  // //Ask the user for the base user they wish to analyse
-  // let userdetails;
-  // await inquirer
-  //   .askForInitialUsername()
-  //   .then(ruserdetails => {
-  //     console.log(ruserdetails);
-  //     userdetails = ruserdetails;
-  //   })
-  //   .catch(error => {
-  //     console.log(error);
-  //   });
+  //Ask the user for the base user they wish to analyse
+  let userdetails;
+  await inquirer
+    .askForInitialUsername()
+    .then(ruserdetails => {
+      console.log(ruserdetails);
+      userdetails = ruserdetails;
+    })
+    .catch(error => {
+      console.log(error);
+    });
 
-  // //github.checkRateLimit(githubClient);
-  // let userInfo = await fetchUserInfo(githubClient, userdetails.username);
-  // let userInfoString = JSON.stringify(userInfo);
-  // await diskAccess.writeToFile(userInfoString);
+  //github.checkRateLimit(githubClient);
+  let userInfo = await fetchUserInfo(githubClient, userdetails.username);
+  let userInfoString = JSON.stringify(userInfo);
+  await diskAccess.writeToFile(userInfoString);
 
-  // console.log("me annoying");
+  console.log("me annoying");
 
-  let textAnalysisClient = await textAnalysis.createTextAnalysisClient();
-  textAnalysis.sentimentAnalysis(textAnalysisClient);
+  // let textAnalysisClient = await textAnalysis.createTextAnalysisClient();
+  // textAnalysis.sentimentAnalysis(textAnalysisClient, userInfo);
 
   //pretty print the users details along with all their repos and commits
 

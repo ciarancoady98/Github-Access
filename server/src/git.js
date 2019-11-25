@@ -1,10 +1,5 @@
 const github = require("octonode");
 const inquirer = require("./inquirer");
-const CLI = require("clui");
-const Spinner = CLI.Spinner;
-let status = new Spinner(
-  "We were too speedy! time to wait for the api to stop being salty..."
-);
 /*
 const CLI = require("clui");
 const Spinner = CLI.Spinner;
@@ -32,6 +27,33 @@ async function authLogin(credentials) {
   });
 }
 
+async function checkRateLimit(client) {
+  return new Promise(resolve => {
+    client.limit((err, left, max, reset) => {
+      console.log("left : " + left); // 4999
+      console.log("max : " + max); // 5000
+      console.log(
+        "reset time: " + (new Date(reset * 1000) - new Date()) + "ms"
+      );
+      if (left == 0) {
+        let delayInMilliseconds = new Date(reset * 1000) - new Date();
+        console.log(
+          "We were too speedy! time to wait for the api to stop being salty..."
+        );
+        console.log("we must wait " + delayInMilliseconds + "ms");
+        console.log("waiting ......");
+        new Promise(resolve => {
+          setTimeout(() => {
+            console.log("we've timed out");
+            resolve();
+          }, delayInMilliseconds);
+        });
+      }
+      resolve();
+    });
+  });
+}
+
 module.exports = {
   //Setup a logged in client so we can query the github rest api
   buildLoggedInGitClient: async () => {
@@ -50,6 +72,7 @@ module.exports = {
   },
   //Make a simple request to get current signed in users data
   getUserDetails: async (client, username) => {
+    await checkRateLimit(client);
     return new Promise(resolve => {
       client.get("/users/" + username, (err, status, body, headers) => {
         //console.log("we are resolving the promise");
@@ -60,6 +83,7 @@ module.exports = {
   },
   //Make a request to get a users followers
   getFollowers: async (client, username) => {
+    await checkRateLimit(client);
     return new Promise(resolve => {
       client.get(
         "/users/" + username + "/followers",
@@ -72,6 +96,7 @@ module.exports = {
   },
   //Make a request to get a users repos
   getRepos: async (client, username) => {
+    await checkRateLimit(client);
     return new Promise(resolve => {
       client.get(
         "/users/" + username + "/repos",
@@ -84,6 +109,7 @@ module.exports = {
   },
   //Make a request to get a repos commits
   getCommits: async (client, username, reponame) => {
+    await checkRateLimit(client);
     return new Promise(resolve => {
       client.get(
         "/repos/" + username + "/" + reponame + "/commits",
@@ -92,29 +118,6 @@ module.exports = {
           resolve(body);
         }
       );
-    });
-  },
-  checkRateLimit: async client => {
-    return new Promise(resolve => {
-      client.limit((err, left, max, reset) => {
-        console.log("left : " + left); // 4999
-        console.log("max : " + max); // 5000
-        console.log(
-          "reset time: " + (new Date(reset * 1000) - new Date()) + "ms"
-        );
-        if (left == 0) {
-          let delayInMilliseconds = new Date(reset * 1000) - new Date();
-          console.log("we must wait " + delayInMilliseconds + "ms");
-          console.log("waiting ......");
-          new Promise(resolve => {
-            setTimeout(() => {
-              console.log("we've timed out");
-              resolve();
-            }, delayInMilliseconds);
-          });
-        }
-        resolve();
-      });
     });
   }
 };

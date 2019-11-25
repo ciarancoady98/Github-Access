@@ -1,6 +1,6 @@
 module.exports = {
   //rawRepos is of the format [{full_name: 'ciarancoady98/The-Turing-Game', name: 'The-Turing-Game}]
-  parseFollowers: rawRepos => {
+  parseRepos: rawRepos => {
     if (rawRepos != null) {
       let listOfRepoNames = [];
       for (let i = 0; i < rawRepos.length; i++) {
@@ -13,17 +13,30 @@ module.exports = {
       throw "Cannot parse an empty json";
     }
   },
+  //some possible tweaks to work better with a higher number of commit messages
   parseRepoCommits: (rawCommits, username) => {
     if (rawCommits != null) {
       let commitMessages = [];
+      let idNumber = 0;
       for (let i = 0; i < rawCommits.length; i++) {
         let commit = rawCommits[i];
         if (commit != null) {
           try {
             let author = commit.author.login;
             let message = commit.commit.message;
-            if (author == username && message != null) {
-              commitMessages.push(message);
+            idNumber >= 100
+              ? console.log(
+                  "We have hit the 100 commit limit for sentiment analysis"
+                )
+              : console.log("Within the commit limit");
+            if (author == username && message != null && idNumber <= 100) {
+              messageObject = {
+                language: "en",
+                id: "" + idNumber,
+                text: message
+              };
+              commitMessages.push(messageObject);
+              idNumber += 1;
             }
           } catch (e) {
             console.log(e);

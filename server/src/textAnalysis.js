@@ -21,7 +21,7 @@ async function createTextAnalysisClient() {
   return textAnalyticsClient;
 }
 
-async function sentimentAnalysis(client) {
+async function sentimentAnalysis(client, sentimentInput) {
   console.log("3. This will perform sentiment analysis on the sentences.");
 
   const sentimentInput = {

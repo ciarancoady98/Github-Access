@@ -85,8 +85,14 @@ async function start() {
   let userInfo = await fetchUserInfo(githubClient, userdetails.username);
   let userInfoString = JSON.stringify(userInfo);
   await diskAccess.writeToFile(userInfoString);
-
-  console.log("me annoying");
+  for (let i = 0; i < userInfo.repoCommits.length; i++) {
+    if (userInfo.repoCommits[i] != null && userInfo.repoCommits[i].length > 0) {
+      let commitsForTextAnalysis = { document: userInfo.repoCommits[i] };
+      console.log("----------------------------------------");
+      console.log(commitsForTextAnalysis);
+      console.log("----------------------------------------");
+    }
+  }
 
   // let textAnalysisClient = await textAnalysis.createTextAnalysisClient();
   // textAnalysis.sentimentAnalysis(textAnalysisClient, userInfo);

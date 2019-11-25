@@ -14,8 +14,24 @@ module.exports = {
     }
   },
   //some possible tweaks to work better with a higher number of commit messages
-  parseRepoCommits: (rawCommits, username) => {
-    if (rawCommits != null) {
+  parseRepoCommits: (rawUserData, username) => {
+    if (rawUserData != null && rawUserData.repoCommits != null) {
+      let currentBatchId = 0;
+      let currentBatch = [];
+      let documents = [];
+      for (let i = 0; i < rawUserData.repoCommits.length; i++) {
+        try{
+
+          let author = repoCommits[i].author;
+            let message = repoCommits[i].message;
+            if(author == username && message != null){
+              let commit = 
+            }
+        }
+        catch (error){
+          console.log(error);
+        }
+      }
       let commitMessages = [];
       let idNumber = 0;
       for (let i = 0; i < rawCommits.length; i++) {

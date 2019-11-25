@@ -63,16 +63,30 @@ async function start() {
   // let userInfoString = JSON.stringify(userInfo);
   // await diskAccess.writeToFile(userInfoString);
 
-  let username;
-  let repos = await parser.parseUserRepos(githubClient, userdetails.username);
-  console.log(repos);
-  let commits = await parser.parseRepoCommits(
-    githubClient,
-    userdetails.username,
-    repos
+  let rawRepos = await github.getRepos(githubClient, userdetails.username);
+  //console.log(rawRepos);
+  let parsedRepos = parser.parseUserRepos(rawRepos, userdetails.username);
+  //console.log(parsedRepos);
+  let rawCommits = [];
+  for (let i = 0; i < parsedRepos.length; i++) {
+    let singleRepoCommits = await github.getCommits(
+      githubClient,
+      userdetails.username,
+      parsedRepos[i]
+    );
+    rawCommits.push(singleRepoCommits);
+  }
+  let parsedCommits = parser.parseRepoCommits(rawCommits, userdetails.username);
+  let documentsForSentimentAnalysis = parser.parseCommitsForSentimentAnalysis(
+    parsedCommits
   );
-  console.log(commits);
-  //let sentiment = await fetchCommitSentiment(textAnalysisClient, commits);
+  console.log(documentsForSentimentAnalysis);
+  console.log(documentsForSentimentAnalysis.length);
+  let sentiments = [];
+  for (let i = 0; i < documentsForSentimentAnalysis.length; i++) {
+    //let documentResults = await fetchCommitSentiment(textAnalysisClient, commits);
+    sentiments.push(documentResults);
+  }
 
   //pretty print the users details along with all their repos and commits
 

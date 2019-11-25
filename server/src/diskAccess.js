@@ -4,7 +4,7 @@ module.exports = {
   writeToFile: async stringToSave => {
     return new Promise(resolve => {
       fs.writeFile(
-        "C:/Users/jonco/Github-Access/test.txt",
+        "D:/Ciaran/Github-Access/server/test.txt",
         stringToSave,
         function(err) {
           if (err) {

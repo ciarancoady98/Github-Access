@@ -22,33 +22,13 @@ async function createTextAnalysisClient() {
 }
 
 async function sentimentAnalysis(client, sentimentInput) {
-  console.log("3. This will perform sentiment analysis on the sentences.");
-
-  const sentimentInput = {
-    documents: [
-      { language: "en", id: "1", text: "I had the best day of my life." },
-      {
-        language: "en",
-        id: "2",
-        text: "This was a waste of my time. The speaker put me to sleep."
-      },
-      {
-        language: "es",
-        id: "3",
-        text: "No tengo dinero ni nada que dar..."
-      },
-      {
-        language: "it",
-        id: "4",
-        text:
-          "L'hotel veneziano era meraviglioso. È un bellissimo pezzo di architettura."
-      }
-    ]
+  const sentimentJson = {
+    documents: sentimentInput
   };
-
   const sentimentResult = await client.sentiment({
-    multiLanguageBatchInput: sentimentInput
+    multiLanguageBatchInput: sentimentJson
   });
-  console.log(sentimentResult.documents);
-  console.log(os.EOL);
+  // console.log(sentimentResult.documents);
+  // console.log(os.EOL);
+  return sentimentResult;
 }

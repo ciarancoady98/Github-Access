@@ -30,11 +30,11 @@ async function authLogin(credentials) {
 async function checkRateLimit(client) {
   return new Promise(resolve => {
     client.limit((err, left, max, reset) => {
-      console.log("left : " + left); // 4999
-      console.log("max : " + max); // 5000
-      console.log(
-        "reset time: " + (new Date(reset * 1000) - new Date()) + "ms"
-      );
+      // console.log("left : " + left); // 4999
+      // console.log("max : " + max); // 5000
+      // console.log(
+      //   "reset time: " + (new Date(reset * 1000) - new Date()) + "ms"
+      // );
       if (left == 0) {
         let delayInMilliseconds = new Date(reset * 1000) - new Date();
         console.log(

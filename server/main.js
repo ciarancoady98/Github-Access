@@ -17,97 +17,146 @@ async function start() {
     chalk.yellow(figlet.textSync("Github Access", { horizontalLayout: "full" }))
   );
 
-  //Build a github client
-  let githubClient = null;
-  await github
-    .buildLoggedInGitClient()
+  // //Build a github client
+  // let githubClient = null;
+  // await github
+  //   .buildLoggedInGitClient()
+  //   .then(success => {
+  //     if (success != null) {
+  //       console.log("A github client was created successfully");
+  //       githubClient = success;
+  //     } else
+  //       throw "I'm afraid something has gone horribly wrong! No github client for you!";
+  //   })
+  //   .catch(error => {
+  //     console.log(error);
+  //   });
+
+  // //Build an azure text analysis client
+  // let textAnalysisClient = null;
+  // await textAnalysis
+  //   .createTextAnalysisClient()
+  //   .then(success => {
+  //     if (success != null) {
+  //       console.log("A azure client was created successfully");
+  //       textAnalysisClient = success;
+  //     } else
+  //       throw "I'm afraid something has gone horribly wrong! No azure client for you!";
+  //   })
+  //   .catch(error => {
+  //     console.log(error);
+  //   });
+
+  //Build a mongo client
+  let mongoClient = null;
+  await mongodb
+    .buildMongoClient()
     .then(success => {
-      if (success != null) {
-        console.log("A github client was created successfully");
-        githubClient = success;
-      } else
-        throw "I'm afraid something has gone horribly wrong! No github client for you!";
+      console.log("successfully created mongo client");
+      mongoClient = success;
     })
     .catch(error => {
       console.log(error);
     });
 
-  //Build an azure text analysis client
-  let textAnalysisClient = null;
-  await textAnalysis
-    .createTextAnalysisClient()
-    .then(success => {
-      if (success != null) {
-        console.log("A azure client was created successfully");
-        textAnalysisClient = success;
-      } else
-        throw "I'm afraid something has gone horribly wrong! No azure client for you!";
-    })
-    .catch(error => {
-      console.log(error);
-    });
+  // //Ask the user for the base user they wish to analyse
+  // let userdetails;
+  // await inquirer
+  //   .askForInitialUsername()
+  //   .then(ruserdetails => {
+  //     console.log(ruserdetails);
+  //     userdetails = ruserdetails;
+  //   })
+  //   .catch(error => {
+  //     console.log(error);
+  //   });
 
-  //Ask the user for the base user they wish to analyse
-  let userdetails;
-  await inquirer
-    .askForInitialUsername()
-    .then(ruserdetails => {
-      console.log(ruserdetails);
-      userdetails = ruserdetails;
-    })
-    .catch(error => {
-      console.log(error);
-    });
+  // let rawRepos = await github.getRepos(githubClient, userdetails.username);
+  // console.log("retreived rawRepos");
+  // let parsedRepos = parser.parseUserRepos(rawRepos, userdetails.username);
+  // console.log("parsed repos");
+  // let rawCommits = [];
+  // for (let i = 0; i < parsedRepos.length; i++) {
+  //   let singleRepoCommits = await github.getCommits(
+  //     githubClient,
+  //     userdetails.username,
+  //     parsedRepos[i]
+  //   );
+  //   rawCommits.push(singleRepoCommits);
+  // }
+  // console.log("retreived rawCommits");
+  // let parsedCommits = parser.parseRepoCommits(rawCommits, userdetails.username);
+  // console.log("parsed commits");
+  // let documentsForSentimentAnalysis = parser.parseCommitsForSentimentAnalysis(
+  //   parsedCommits
+  // );
+  // console.log("setup documents of sentiment analysis");
+  // // console.log("--------------------------------------------");
+  // // console.log(documentsForSentimentAnalysis);
+  // // console.log(documentsForSentimentAnalysis.length);
+  // // console.log("-------------------------------------------");
+  // let documentResults = await textAnalysis
+  //   .sentimentAnalysis(textAnalysisClient, documentsForSentimentAnalysis)
+  //   .catch(error => {
+  //     console.log(error);
+  //   });
+  // //console.log(documentResults);
 
-  let rawRepos = await github.getRepos(githubClient, userdetails.username);
-  console.log("retreived rawRepos");
-  let parsedRepos = parser.parseUserRepos(rawRepos, userdetails.username);
-  console.log("parsed repos");
-  let rawCommits = [];
-  for (let i = 0; i < parsedRepos.length; i++) {
-    let singleRepoCommits = await github.getCommits(
-      githubClient,
-      userdetails.username,
-      parsedRepos[i]
-    );
-    rawCommits.push(singleRepoCommits);
-  }
-  console.log("retreived rawCommits");
-  let parsedCommits = parser.parseRepoCommits(rawCommits, userdetails.username);
-  console.log("parsed commits");
-  let documentsForSentimentAnalysis = parser.parseCommitsForSentimentAnalysis(
-    parsedCommits
-  );
-  console.log("setup documents of sentiment analysis");
-  // console.log("--------------------------------------------");
-  // console.log(documentsForSentimentAnalysis);
-  // console.log(documentsForSentimentAnalysis.length);
-  // console.log("-------------------------------------------");
-  let documentResults = await textAnalysis
-    .sentimentAnalysis(textAnalysisClient, documentsForSentimentAnalysis)
-    .catch(error => {
-      console.log(error);
-    });
-  //console.log(documentResults);
-
-  let overallresults = {
-    username: userdetails.username,
-    repos: parsedRepos,
-    commits: parsedCommits,
-    sentiment: documentResults
-  };
+  // let overallresults = {
+  //   username: userdetails.username,
+  //   repos: parsedRepos,
+  //   commits: parsedCommits,
+  //   sentiment: documentResults
+  // };
   // let overallResultsString = JSON.stringify(overallresults);
   // await diskAccess.writeToFile(overallResultsString);
 
   //pretty print the users details along with all their repos and commits
 
+  let overallresults = {
+    username: "test",
+    repos: "test",
+    commits: "test",
+    sentiment: "test"
+  };
+
   //get followers returns a json containing
   //status: 200, [{ login: "username1" }, { login: "username2" }];
   console.log("storing results in mongo");
-  //Build a mongo client
-  let mongoClient = await mongodb.buildMongoClient();
-  await mongodb.connectToMongo(mongoClient);
-  await mongodb.insertInMongo(mongoClient, overallresults);
+
+  let mongoContents;
+  await mongodb
+    .getMongoContents(mongoClient)
+    .then(success => {
+      console.log("successfully pulled mongo contents");
+      console.log(success);
+      mongoContents = success;
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  console.log("getting username ciarancoady98");
+  await mongodb
+    .getUserFromMongo(mongoClient, "ciarancoady98")
+    .then(success => {
+      console.log("successfully retreived from mongo");
+      console.log(success);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  console.log("getting username poop");
+  await mongodb
+    .getUserFromMongo(mongoClient, "poop")
+    .then(success => {
+      console.log("successfully retreived from mongo");
+      console.log(success);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+
+  mongoClient.close();
 
   //we are going to make a graph where every node is either a user or a commit, each user will be coloured blue, each commit will be coloured from green to red depending on sentiment
   //get the users followers

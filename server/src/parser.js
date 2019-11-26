@@ -47,30 +47,22 @@ module.exports = {
   parseCommitsForSentimentAnalysis: commits => {
     if (commits != null) {
       let maxDocumentSize = 5106;
-      let documents = [];
-      let currentCharacterCount = 0;
-      let formattedMessages = [];
+      //let documents = [];
+      let currentDocument = [];
       let idNumber = 0;
-      for (let i = 0; i < commits.length; i++) {
+      //limit the number of commits we are going to analyse to 1000
+      let commitsToAnalyse = commits.length < 1000 ? commits.length : 1000;
+      for (let i = 0; i < commitsToAnalyse; i++) {
         let commit = commits[i];
         if (commit != null) {
           if (commit.messageLength < maxDocumentSize) {
-            if (
-              currentCharacterCount + commit.messageLength >=
-              maxDocumentSize
-            ) {
-              documents.push(formattedMessages);
-              formattedMessages = [];
-              currentCharacterCount = 0;
-            }
             try {
               messageObject = {
                 language: "en",
                 id: "" + idNumber,
                 text: commit.message
               };
-              formattedMessages.push(messageObject);
-              currentCharacterCount += commit.messageLength + 14;
+              currentDocument.push(messageObject);
               idNumber += 1;
             } catch (e) {
               console.log(e);
@@ -78,7 +70,7 @@ module.exports = {
           }
         }
       }
-      return documents;
+      return currentDocument;
     } else {
       throw "Cannot parse an empty json";
     }

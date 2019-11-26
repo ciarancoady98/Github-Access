@@ -83,25 +83,25 @@ async function start() {
   // console.log(documentsForSentimentAnalysis);
   // console.log(documentsForSentimentAnalysis.length);
   // console.log("-------------------------------------------");
-  let sentiments = [];
-  for (let i = 0; i < documentsForSentimentAnalysis.length; i++) {
-    let documentResults = await textAnalysis
-      .sentimentAnalysis(textAnalysisClient, documentsForSentimentAnalysis[i])
-      .catch(error => {
-        console.log(error);
-      });
-    sentiments.push(documentResults);
-  }
-  console.log(sentiments);
+  // let sentiments = [];
+  // for (let i = 0; i < documentsForSentimentAnalysis.length; i++) {
+  //   let documentResults = await textAnalysis
+  //     .sentimentAnalysis(textAnalysisClient, documentsForSentimentAnalysis[i])
+  //     .catch(error => {
+  //       console.log(error);
+  //     });
+  //   sentiments.push(documentResults);
+  // }
+  console.log(documentsForSentimentAnalysis);
 
-  let overallresults = {
-    username: userdetails.username,
-    repos: parsedRepos,
-    commits: parsedCommits,
-    sentiment: sentiments
-  };
-  let overallResultsString = JSON.stringify(overallresults);
-  await diskAccess.writeToFile(overallResultsString);
+  // let overallresults = {
+  //   username: userdetails.username,
+  //   repos: parsedRepos,
+  //   commits: parsedCommits,
+  //   sentiment: sentiments
+  // };
+  // let overallResultsString = JSON.stringify(overallresults);
+  // await diskAccess.writeToFile(overallResultsString);
 
   //pretty print the users details along with all their repos and commits
 

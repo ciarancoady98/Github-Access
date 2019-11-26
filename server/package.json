@@ -27,7 +27,6 @@
     "clui": "^0.3.6",
     "figlet": "^1.2.4",
     "inquirer": "^7.0.0",
-    "mariadb": "^2.1.2",
     "mongodb": "^3.3.4",
     "octonode": "^0.9.5"
   }

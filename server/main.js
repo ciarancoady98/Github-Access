@@ -1,7 +1,6 @@
 const chalk = require("chalk");
 const figlet = require("figlet");
 const github = require("./src/git");
-const sql = require("./src/sql");
 const mongodb = require("./src/mongodb");
 const inquirer = require("./src/inquirer");
 const parser = require("./src/parser");
@@ -165,9 +164,6 @@ async function start() {
   //we are going to make a graph where every node is either a user or a commit, each user will be coloured blue, each commit will be coloured from green to red depending on sentiment
   //get the users followers
   //
-
-  //login to sql server
-  //var connectionPool = await sql.serverLogin();
 }
 
 start();

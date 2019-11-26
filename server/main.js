@@ -79,14 +79,17 @@ async function start() {
     parsedCommits
   );
   console.log("setup documents of sentiment analysis");
+  // console.log("--------------------------------------------");
   // console.log(documentsForSentimentAnalysis);
   // console.log(documentsForSentimentAnalysis.length);
+  // console.log("-------------------------------------------");
   let sentiments = [];
   for (let i = 0; i < documentsForSentimentAnalysis.length; i++) {
-    let documentResults = await textAnalysis.sentimentAnalysis(
-      textAnalysisClient,
-      documentsForSentimentAnalysis
-    );
+    let documentResults = await textAnalysis
+      .sentimentAnalysis(textAnalysisClient, documentsForSentimentAnalysis[i])
+      .catch(error => {
+        console.log(error);
+      });
     sentiments.push(documentResults);
   }
   console.log(sentiments);

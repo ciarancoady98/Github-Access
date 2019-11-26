@@ -62,7 +62,6 @@ module.exports = {
               documents.push(formattedMessages);
               formattedMessages = [];
               currentCharacterCount = 0;
-              idNumber = 0;
             }
             try {
               messageObject = {

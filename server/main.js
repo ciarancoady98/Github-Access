@@ -48,12 +48,10 @@ async function start() {
   //   });
 
   //Build a mongo client
-  let mongoClient = null;
   await mongodb
-    .buildMongoClient()
+    .setupMongoClientDetails()
     .then(success => {
-      console.log("successfully created mongo client");
-      mongoClient = success;
+      console.log("successfully setup mongo client details");
     })
     .catch(error => {
       console.log(error);
@@ -126,7 +124,7 @@ async function start() {
 
   let mongoContents;
   await mongodb
-    .getMongoContents(mongoClient)
+    .getMongoContents()
     .then(success => {
       console.log("successfully pulled mongo contents");
       console.log(success);
@@ -137,7 +135,7 @@ async function start() {
     });
   console.log("getting username ciarancoady98");
   await mongodb
-    .getUserFromMongo(mongoClient, "ciarancoady98")
+    .getUserFromMongo("ciarancoady98")
     .then(success => {
       console.log("successfully retreived from mongo");
       console.log(success);
@@ -147,7 +145,7 @@ async function start() {
     });
   console.log("getting username poop");
   await mongodb
-    .getUserFromMongo(mongoClient, "poop")
+    .getUserFromMongo("poop")
     .then(success => {
       console.log("successfully retreived from mongo");
       console.log(success);
@@ -155,8 +153,6 @@ async function start() {
     .catch(error => {
       console.log(error);
     });
-
-  mongoClient.close();
 
   //we are going to make a graph where every node is either a user or a commit, each user will be coloured blue, each commit will be coloured from green to red depending on sentiment
   //get the users followers

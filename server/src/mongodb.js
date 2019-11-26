@@ -2,56 +2,72 @@ const MongoClient = require("mongodb").MongoClient;
 const inquirer = require("./inquirer");
 const mongodbApiKeys = require("./mongodbApiKeys");
 
+let globalUri = null;
+
 module.exports = {
-  buildMongoClient: async () => {
+  setupMongoClientDetails: async () => {
     const mongoPassword = await inquirer.askForMongoPassword();
-    const uri = mongodbApiKeys.getUri(mongoPassword.password);
+    globalUri = mongodbApiKeys.getUri(mongoPassword.password);
     return new Promise(success => {
-      const client = new MongoClient(uri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-      });
-      success(client);
+      success();
     });
   },
-  getMongoContents: async client => {
+  getMongoContents: async () => {
     return new Promise(success => {
-      client.connect(err => {
-        if (err) throw err;
-        const collection = client
-          .db("GithubAccess")
-          .collection("visualisationdata");
-        // perform actions on the collection object
-        collection.find().toArray((err, items) => {
-          success(items);
-        });
-      });
+      MongoClient.connect(
+        globalUri,
+        { useUnifiedTopology: true },
+        (err, client) => {
+          if (err) throw err;
+          const collection = client
+            .db("GithubAccess")
+            .collection("visualisationdata");
+          // perform actions on the collection object
+          collection.find().toArray((err, items) => {
+            collection;
+            client.close();
+            success(items);
+          });
+        }
+      );
     });
   },
-  getUserFromMongo: async (client, usernameToFind) => {
+  getUserFromMongo: async usernameToFind => {
     return new Promise(success => {
-      client.connect(err => {
-        if (err) throw err;
-        const collection = client
-          .db("GithubAccess")
-          .collection("visualisationdata");
-        // perform actions on the collection object
-        collection.find({ username: usernameToFind }).toArray((err, items) => {
-          success(items);
-        });
-      });
+      MongoClient.connect(
+        globalUri,
+        { useUnifiedTopology: true },
+        (err, client) => {
+          if (err) throw err;
+          const collection = client
+            .db("GithubAccess")
+            .collection("visualisationdata");
+          // perform actions on the collection object
+          collection
+            .find({ username: usernameToFind })
+            .toArray((err, items) => {
+              client.close();
+              success(items);
+            });
+        }
+      );
     });
   },
-  insertInMongo: async (client, data) => {
+  insertInMongo: async data => {
     return new Promise(success => {
-      client.connect(err => {
-        if (err) throw err;
-        client
-          .db("GithubAccess")
-          .collection("visualisationdata")
-          .insertOne(data);
-        success();
-      });
+      MongoClient.connect(
+        globalUri,
+        { useUnifiedTopology: true },
+        (err, client) => {
+          if (err) throw err;
+          client
+            .db("GithubAccess")
+            .collection("visualisationdata")
+            .insertOne(data);
+          client.close();
+          success();
+        }
+      );
     });
   }
 };

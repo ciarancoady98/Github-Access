@@ -18,7 +18,8 @@
 </style>
 <svg width="960" height="600"></svg>
 <script src="https://d3js.org/d3.v4.min.js"></script>
-<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script src="https://d3js.org/d3-color.v1.min.js"></script>
+<script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
 <script>
   var svg = d3.select("svg"),
     width = +svg.attr("width"),
@@ -270,11 +271,7 @@
     .enter()
     .append("g");
 
-  var myColor = d3
-    .scaleLinear()
-    .domain([0, 1])
-    .range(["#d73027", "#1a9850"])
-    .interpolate(d3.interpolateHcl); //interpolateHsl interpolateHcl interpolateRgb
+  var interpolate = d3.interpolateRgb("red", "green");
 
   var circles = node
     .append("circle")
@@ -282,7 +279,8 @@
       return d.sentiment == 2 ? 10 : 5;
     })
     .attr("fill", function(d) {
-      return myColor(d.type);
+      console.log(d);
+      return d.sentiment == 2 ? "green" : interpolate(d.sentiment);
     })
     .call(
       d3

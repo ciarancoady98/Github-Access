@@ -4,7 +4,7 @@ module.exports = {
   writeToFile: async (stringToSave, filename) => {
     return new Promise(resolve => {
       fs.writeFile(
-        "D:/Ciaran/Github-Access/client/" + filename + ".txt",
+        "D:/Ciaran/Github-Access/client/" + filename + ".json",
         stringToSave,
         function(err) {
           if (err) {

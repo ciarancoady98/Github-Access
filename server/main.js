@@ -109,45 +109,55 @@ async function start() {
       console.log(error);
     });
 
-  console.log("Checking is " + userdetails.username + " is in the database");
-  let inDb;
-  await mongodb
-    .getUserFromMongo(userdetails.username)
+  //get users followers
+  let followers = null;
+  await github
+    .getFollowers(githubClient, userdetails.username)
     .then(success => {
-      if (success != null && success.length > 0) {
-        console.log("the user " + userdetails.username + " is in the database");
-        //console.log(success);
-        inDb = true;
-      } else {
-        console.log("the user is not in the database");
-        inDb = false;
-      }
+      followers = success;
     })
     .catch(error => {
       console.log(error);
     });
+  console.log(followers);
 
-  if (!inDb) {
-    console.log("lets put this goober in the db!");
-    let userInfo = await fetchUserInfo(
-      githubClient,
-      textAnalysisClient,
-      userdetails.username
-    );
-    console.log("storing results in mongo");
-    await mongodb
-      .insertInMongo(userInfo)
-      .then(success => {
-        console.log(
-          "successfully inserted " + userdetails.username + " into the database"
-        );
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }
+  // console.log("Checking is " + userdetails.username + " is in the database");
+  // let inDb;
+  // await mongodb
+  //   .getUserFromMongo(userdetails.username)
+  //   .then(success => {
+  //     if (success != null && success.length > 0) {
+  //       console.log("the user " + userdetails.username + " is in the database");
+  //       //console.log(success);
+  //       inDb = true;
+  //     } else {
+  //       console.log("the user is not in the database");
+  //       inDb = false;
+  //     }
+  //   })
+  //   .catch(error => {
+  //     console.log(error);
+  //   });
 
-  //get users followers
+  // if (!inDb) {
+  //   console.log("lets put this goober in the db!");
+  //   let userInfo = await fetchUserInfo(
+  //     githubClient,
+  //     textAnalysisClient,
+  //     userdetails.username
+  //   );
+  //   console.log("storing results in mongo");
+  //   await mongodb
+  //     .insertInMongo(userInfo)
+  //     .then(success => {
+  //       console.log(
+  //         "successfully inserted " + userdetails.username + " into the database"
+  //       );
+  //     })
+  //     .catch(error => {
+  //       console.log(error);
+  //     });
+  // }
 
   // for(every follower){
   //   if they are not in the db{

@@ -44,7 +44,7 @@ async function fetchUserInfo(githubClient, textAnalysisClient, username) {
     sentiment: documentResults
   };
   console.log("saving results to disk as a backup");
-  let overallResultsString = JSON.stringify(overallresults);
+  let overallResultsString = JSON.stringify(overallresults, null, 2);
   await diskAccess.writeToFile(overallResultsString, username);
   return overallresults;
 }

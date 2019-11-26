@@ -10,6 +10,46 @@ const textAnalysis = require("./src/textAnalysis");
 const CLI = require("clui");
 const Spinner = CLI.Spinner;
 
+async function fetchUserInfo(githubClient, textAnalysisClient, username) {
+  let rawRepos = await github.getRepos(githubClient, username);
+  console.log("retreived rawRepos for " + username);
+  let parsedRepos = parser.parseUserRepos(rawRepos, username);
+  console.log("parsed repos for " + username);
+  let rawCommits = [];
+  for (let i = 0; i < parsedRepos.length; i++) {
+    let singleRepoCommits = await github.getCommits(
+      githubClient,
+      username,
+      parsedRepos[i]
+    );
+    rawCommits.push(singleRepoCommits);
+  }
+  console.log("retreived rawCommits for " + username);
+  let parsedCommits = parser.parseRepoCommits(rawCommits, username);
+  console.log("parsed commits for " + username);
+  let documentsForSentimentAnalysis = parser.parseCommitsForSentimentAnalysis(
+    parsedCommits
+  );
+  console.log("setup documents for sentiment analysis for " + username);
+  let documentResults = await textAnalysis
+    .sentimentAnalysis(textAnalysisClient, documentsForSentimentAnalysis)
+    .catch(error => {
+      console.log(error);
+    });
+  console.log("Retreived sentiment of " + username + "'s commits");
+
+  let overallresults = {
+    username: userdetails.username,
+    repos: parsedRepos,
+    commits: parsedCommits,
+    sentiment: documentResults
+  };
+  console.log("saving results to disk as a backup");
+  let overallResultsString = JSON.stringify(overallresults);
+  await diskAccess.writeToFile(overallResultsString, username);
+  return overallresults;
+}
+
 //Mainline
 async function start() {
   //Pretty print program name
@@ -69,46 +109,6 @@ async function start() {
   //     console.log(error);
   //   });
 
-  // let rawRepos = await github.getRepos(githubClient, userdetails.username);
-  // console.log("retreived rawRepos");
-  // let parsedRepos = parser.parseUserRepos(rawRepos, userdetails.username);
-  // console.log("parsed repos");
-  // let rawCommits = [];
-  // for (let i = 0; i < parsedRepos.length; i++) {
-  //   let singleRepoCommits = await github.getCommits(
-  //     githubClient,
-  //     userdetails.username,
-  //     parsedRepos[i]
-  //   );
-  //   rawCommits.push(singleRepoCommits);
-  // }
-  // console.log("retreived rawCommits");
-  // let parsedCommits = parser.parseRepoCommits(rawCommits, userdetails.username);
-  // console.log("parsed commits");
-  // let documentsForSentimentAnalysis = parser.parseCommitsForSentimentAnalysis(
-  //   parsedCommits
-  // );
-  // console.log("setup documents of sentiment analysis");
-  // // console.log("--------------------------------------------");
-  // // console.log(documentsForSentimentAnalysis);
-  // // console.log(documentsForSentimentAnalysis.length);
-  // // console.log("-------------------------------------------");
-  // let documentResults = await textAnalysis
-  //   .sentimentAnalysis(textAnalysisClient, documentsForSentimentAnalysis)
-  //   .catch(error => {
-  //     console.log(error);
-  //   });
-  // //console.log(documentResults);
-
-  // let overallresults = {
-  //   username: userdetails.username,
-  //   repos: parsedRepos,
-  //   commits: parsedCommits,
-  //   sentiment: documentResults
-  // };
-  // let overallResultsString = JSON.stringify(overallresults);
-  // await diskAccess.writeToFile(overallResultsString);
-
   //pretty print the users details along with all their repos and commits
 
   let overallresults = {
@@ -121,8 +121,6 @@ async function start() {
   //get followers returns a json containing
   //status: 200, [{ login: "username1" }, { login: "username2" }];
   console.log("storing results in mongo");
-
-  let mongoContents;
   await mongodb
     .getMongoContents()
     .then(success => {

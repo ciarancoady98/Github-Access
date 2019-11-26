@@ -83,23 +83,19 @@ async function start() {
   // console.log(documentsForSentimentAnalysis);
   // console.log(documentsForSentimentAnalysis.length);
   // console.log("-------------------------------------------");
-  // let sentiments = [];
-  // for (let i = 0; i < documentsForSentimentAnalysis.length; i++) {
-  //   let documentResults = await textAnalysis
-  //     .sentimentAnalysis(textAnalysisClient, documentsForSentimentAnalysis[i])
-  //     .catch(error => {
-  //       console.log(error);
-  //     });
-  //   sentiments.push(documentResults);
-  // }
-  console.log(documentsForSentimentAnalysis);
+  let documentResults = await textAnalysis
+    .sentimentAnalysis(textAnalysisClient, documentsForSentimentAnalysis)
+    .catch(error => {
+      console.log(error);
+    });
+  //console.log(documentResults);
 
-  // let overallresults = {
-  //   username: userdetails.username,
-  //   repos: parsedRepos,
-  //   commits: parsedCommits,
-  //   sentiment: sentiments
-  // };
+  let overallresults = {
+    username: userdetails.username,
+    repos: parsedRepos,
+    commits: parsedCommits,
+    sentiment: documentResults
+  };
   // let overallResultsString = JSON.stringify(overallresults);
   // await diskAccess.writeToFile(overallResultsString);
 
@@ -107,10 +103,11 @@ async function start() {
 
   //get followers returns a json containing
   //status: 200, [{ login: "username1" }, { login: "username2" }];
-
+  console.log("storing results in mongo");
   //Build a mongo client
-  // let mongoClient = await mongodb.buildMongoClient();
-  // await mongodb.connectToMongo(mongoClient);
+  let mongoClient = await mongodb.buildMongoClient();
+  await mongodb.connectToMongo(mongoClient);
+  await mongodb.insertInMongo(mongoClient, overallresults);
 
   //we are going to make a graph where every node is either a user or a commit, each user will be coloured blue, each commit will be coloured from green to red depending on sentiment
   //get the users followers

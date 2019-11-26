@@ -38,7 +38,7 @@ async function checkRateLimit(client) {
       if (left == 0) {
         let delayInMilliseconds = new Date(reset * 1000) - new Date();
         console.log(
-          "We were too speedy! time to wait for the api to stop being salty..."
+          "We were too speedy! time to wait for the github api to stop being salty..."
         );
         console.log("we must wait " + delayInMilliseconds + "ms");
         console.log("waiting ......");

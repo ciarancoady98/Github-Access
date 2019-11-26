@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/ciarancoady98/Github-Access/issues"
   },
-  "homepage": "https://github.com/ciarancoady98/Github-Access#readme"
+  "homepage": "https://github.com/ciarancoady98/Github-Access#readme",
+  "dependencies": {
+    "d3": "^5.14.2",
+    "express": "^4.17.1",
+    "express-handlebars": "^3.1.0",
+    "http": "0.0.0",
+    "path": "^0.12.7"
+  }
 }

@@ -1,6 +1,22 @@
 module.exports = {
+  parseUserFollowers: rawFollowers => {
+    //parse a users followers
+    //[{ login: "username1" }, { login: "username2" }];
+    let parsedFollowers = [];
+    if (rawFollowers != null && rawFollowers.length > 0) {
+      for (let i = 0; i < rawFollowers.length; i++) {
+        try {
+          let username = rawFollowers[i].login;
+          if (username != null) parsedFollowers.push(username);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+    return parsedFollowers;
+  },
   parseRepoCommits: (rawCommits, username) => {
-    //get all the commits for each repo
+    //parse all the commits for each repo
     //[{commit: {message: "de message"}
     //  author: {login: "ciarancoady98"}
     //}]
@@ -47,7 +63,6 @@ module.exports = {
   parseCommitsForSentimentAnalysis: commits => {
     if (commits != null) {
       let maxDocumentSize = 5106;
-      //let documents = [];
       let currentDocument = [];
       let idNumber = 0;
       //limit the number of commits we are going to analyse to 1000

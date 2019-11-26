@@ -30,6 +30,7 @@ const figlet = require("figlet");
 const mongodb = require("./src/mongodb");
 const parser = require("./src/parser");
 const diskAccess = require("./src/diskAccess");
+const util = require("util");
 
 //Mainline
 async function start() {
@@ -62,8 +63,11 @@ async function start() {
     });
 
   parsedDataSet = parser.parseDatabaseForVisualisation(databaseContents);
-  console.log(parsedDataSet);
-  let parsedDataSetString = JSON.stringify(parsedDataSet);
+  //console.log(parsedDataSet);
+
+  let parsedDataSetString = util.inspect(parsedDataSet, {
+    maxArrayLength: null
+  }); //JSON.stringify(parsedDataSet);
   await diskAccess.writeToFile(parsedDataSetString, "dataset");
 
   //we are going to make a graph where every node is either a user or a commit, each user will be coloured blue, each commit will be coloured from green to red depending on sentiment

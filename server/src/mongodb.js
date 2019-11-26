@@ -1,25 +1,73 @@
-const MongoClient = require('mongodb').MongoClient;
-const inquirer = require('./inquirer');
-const mongodbApiKeys = require('./mongodbApiKeys');
+const MongoClient = require("mongodb").MongoClient;
+const inquirer = require("./inquirer");
+const mongodbApiKeys = require("./mongodbApiKeys");
 
-
-
+let globalUri = null;
 
 module.exports = {
-    buildMongoClient: async () => {
-        const mongoPassword = await inquirer.askForMongoPassword();
-        const uri = mongodbApiKeys.getUri(mongoPassword.password);
-        const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-        return client;
-    },
-    connectToMongo: async (client) => {
-        client.connect(err => {
-            const collection = client.db("GithubAccess").collection("ciarancoady98");
-            // perform actions on the collection object
-            collection.find().toArray((err, items) => {
-                console.log(items)
-              })
+  setupMongoClientDetails: async () => {
+    const mongoPassword = await inquirer.askForMongoPassword();
+    globalUri = mongodbApiKeys.getUri(mongoPassword.password);
+    return new Promise(success => {
+      success();
+    });
+  },
+  getMongoContents: async () => {
+    return new Promise(success => {
+      MongoClient.connect(
+        globalUri,
+        { useUnifiedTopology: true },
+        (err, client) => {
+          if (err) throw err;
+          const collection = client
+            .db("GithubAccess")
+            .collection("visualisationdata");
+          // perform actions on the collection object
+          collection.find().toArray((err, items) => {
+            collection;
             client.close();
+            success(items);
           });
-    }
-}
+        }
+      );
+    });
+  },
+  getUserFromMongo: async usernameToFind => {
+    return new Promise(success => {
+      MongoClient.connect(
+        globalUri,
+        { useUnifiedTopology: true },
+        (err, client) => {
+          if (err) throw err;
+          const collection = client
+            .db("GithubAccess")
+            .collection("visualisationdata");
+          // perform actions on the collection object
+          collection
+            .find({ username: usernameToFind })
+            .toArray((err, items) => {
+              client.close();
+              success(items);
+            });
+        }
+      );
+    });
+  },
+  insertInMongo: async data => {
+    return new Promise(success => {
+      MongoClient.connect(
+        globalUri,
+        { useUnifiedTopology: true },
+        (err, client) => {
+          if (err) throw err;
+          client
+            .db("GithubAccess")
+            .collection("visualisationdata")
+            .insertOne(data);
+          client.close();
+          success();
+        }
+      );
+    });
+  }
+};

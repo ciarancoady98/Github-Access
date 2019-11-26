@@ -2,3 +2,4 @@
 node_modules/
 azureApiKeys.js
 mongodbApiKeys.js
+*-bak.txt

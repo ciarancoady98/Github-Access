@@ -271,7 +271,9 @@
 
   var circles = node
     .append("circle")
-    .attr("r", 10)
+    .attr("r", function(d) {
+      return d.sentiment == 2 ? 10 : 5;
+    })
     .attr("fill", function(d) {
       return color(d.type);
     })

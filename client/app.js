@@ -62,7 +62,10 @@ async function start() {
       console.log(error);
     });
 
-  parsedDataSet = parser.parseDatabaseForVisualisation(databaseContents);
+  parsedDataSet = parser.parseDatabaseForVisualisation(
+    databaseContents,
+    "ciarancoady98"
+  );
   //console.log(parsedDataSet);
 
   let parsedDataSetString = util.inspect(parsedDataSet, {

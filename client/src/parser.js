@@ -1,9 +1,34 @@
 module.exports = {
-  parseDatabaseForVisualisation: rawDatabase => {
+  parseDatabaseForVisualisation: (rawDatabase, username) => {
     parsedOutput = [];
     nodesArray = [];
     linksArray = [];
+
     if (rawDatabase != null) {
+      //find index of centre user
+      let found = false;
+      userIndex = 0;
+      for (let i = 0; i < rawDatabase.length && !found; i++) {
+        console.log(rawDatabase[i].username + " == " + username);
+        if (rawDatabase[i].username == username) {
+          found = true;
+          userIndex = i;
+        }
+      }
+
+      //add links from user to followers
+      for (let j = 1; j < rawDatabase.length; j++) {
+        if (j != userIndex) {
+          let link = {
+            source: rawDatabase[userIndex].username,
+            target: rawDatabase[j].username,
+            value: 1
+          };
+          linksArray.push(link);
+        }
+      }
+
+      //add all nodes to the graph
       for (let i = 0; i < rawDatabase.length; i++) {
         //add the user node
         node = {
@@ -11,11 +36,11 @@ module.exports = {
           sentiment: 2
         };
         nodesArray.push(node);
+        //add all commits and sentiment data to the graph
         if (
           rawDatabase[i].commits != null &&
           rawDatabase[i].sentiment != null
         ) {
-          console.log("not null commits or sentiment");
           let maxIndex =
             rawDatabase[i].commits.length <=
             rawDatabase[i].sentiment.documents.length

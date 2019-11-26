@@ -7,7 +7,7 @@ module.exports = {
       for (let i = 0; i < rawDatabase.length; i++) {
         //add the user node
         node = {
-          source: rawDatabase[i].username,
+          id: rawDatabase[i].username,
           sentiment: 2
         };
         nodesArray.push(node);
@@ -23,13 +23,13 @@ module.exports = {
               : rawDatabase[i].sentiment.length;
           for (let j = 0; j < maxIndex; j++) {
             node = {
-              source: rawDatabase[i].username + "-" + j,
+              id: rawDatabase[i].username + "-" + j,
               sentiment: rawDatabase[i].sentiment.documents[j].score
             };
             nodesArray.push(node);
             let link = {
               source: rawDatabase[i].username,
-              target: node.source,
+              target: node.id,
               value: 1
             };
             linksArray.push(link);

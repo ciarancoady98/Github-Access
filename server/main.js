@@ -146,16 +146,14 @@ async function start() {
       let userInfo = await fetchUserInfo(
         githubClient,
         textAnalysisClient,
-        userdetails.username
+        username
       );
       console.log("storing results in mongo");
       await mongodb
         .insertInMongo(userInfo)
         .then(success => {
           console.log(
-            "successfully inserted " +
-              userdetails.username +
-              " into the database"
+            "successfully inserted " + username + " into the database"
           );
         })
         .catch(error => {
@@ -163,15 +161,6 @@ async function start() {
         });
     }
   }
-
-  // for(every follower){
-  //   if they are not in the db{
-  //     get their details and put them in the db
-  //   }
-  // }
-
-  //get followers returns a json containing
-  //status: 200, [{ login: "username1" }, { login: "username2" }];
 
   //we are going to make a graph where every node is either a user or a commit, each user will be coloured blue, each commit will be coloured from green to red depending on sentiment
   //get the users followers

@@ -29,9 +29,15 @@
     .forceSimulation()
     .force(
       "link",
-      d3.forceLink().id(function(d) {
-        return d.id;
-      })
+      d3
+        .forceLink()
+        .id(function(d) {
+          return d.id;
+        })
+        // .distance(function(d) {
+        //   return d.distance;
+        // })
+        .strength(0.2)
     )
     .force("charge", d3.forceManyBody())
     .force("center", d3.forceCenter(width / 2, height / 2));
@@ -280,7 +286,7 @@
   var lables = node
     .append("text")
     .text(function(d) {
-      if (d.type == 1) return d.id;
+      if (d.sentiment == 2) return d.id;
       else return "";
     })
     .attr("x", 6)

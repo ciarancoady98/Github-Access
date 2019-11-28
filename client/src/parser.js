@@ -17,7 +17,7 @@ module.exports = {
       }
 
       //add links from user to followers
-      for (let j = 1; j < rawDatabase.length; j++) {
+      for (let j = 0; j < rawDatabase.length; j++) {
         if (j != userIndex) {
           let link = {
             source: rawDatabase[userIndex].username,

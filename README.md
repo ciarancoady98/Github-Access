@@ -1,6 +1,9 @@
 # Github-Access
 A simple NodeJS program that queries the github api.
 
+# Demo
+![Screenshot](readme_resource/Visualisation_Demo.gif)
+
 # Master
 
 Contains a command program that allows a user to sign into their Github account and displays their profile details.

@@ -2,7 +2,7 @@
 A simple NodeJS program that queries the github api.
 
 # Demo
-![Screenshot](readme_resource/Visualisation_Demo.gif)
+![Screenshot](readme_resources/Visualisation_Demo.gif)
 
 # Master
 

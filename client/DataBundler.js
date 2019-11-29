@@ -28,7 +28,7 @@ async function start() {
   await mongodb
     .getMongoContents()
     .then(success => {
-      console.log(success);
+      //console.log(success);
       databaseContents = success;
     })
     .catch(error => {

@@ -9,7 +9,7 @@ module.exports = {
       let found = false;
       userIndex = 0;
       for (let i = 0; i < rawDatabase.length && !found; i++) {
-        console.log(rawDatabase[i].username + " == " + username);
+        //console.log(rawDatabase[i].username + " == " + username);
         if (rawDatabase[i].username == username) {
           found = true;
           userIndex = i;

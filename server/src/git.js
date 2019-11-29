@@ -14,7 +14,7 @@ async function authLogin(credentials) {
         password: credentials.password
       })
       .login(scopes, function(err, id, token, headers) {
-        console.log(id, token);
+        //console.log(id, token);
         resolve();
       });
   });

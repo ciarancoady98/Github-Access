@@ -99,7 +99,7 @@ async function start() {
   await inquirer
     .askForInitialUsername()
     .then(ruserdetails => {
-      console.log(ruserdetails);
+      //console.log(ruserdetails);
       userdetails = ruserdetails;
     })
     .catch(error => {

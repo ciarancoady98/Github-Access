@@ -23,3 +23,8 @@ A report on the ways in which the software engineering process can be measured a
 # Requirements 
 NodeJS
 MariaDB
+
+![Screenshot](readme_resources/Github_Access_Screenshot.PNG)
+![Screenshot](readme_resources/Github_Access_Screenshot_2.PNG)
+![Screenshot](readme_resources/DataBundling_Screenshot.png)
+![Screenshot](readme_resources/DataBundling_And_Visualisation_Screenshot.png)

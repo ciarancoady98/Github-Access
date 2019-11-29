@@ -4,6 +4,9 @@ I created this application as part of the coursework assigned to me while partic
 # Task
 Interrogate the GitHub API to build visualisation of data available tht elucidates some aspect of the softare engineering process, such as a social graph of developers and projects, or a visualisation of indiviudal of team performance. Provide a visualisation of this using the d3js library. See https://d3js.org
 
+# Idea
+Based on my research of existing data analytics from the github api, I thought an interesting metric to analyse would be the sentiment of peoples commit messages. I found this interesting as I could easily view how positive or negative myself and my peers are when it comes to our work. From this information it could be inferred if the person would boost or reduce moral when working on a group project.
+
 # Demo
 ![Screenshot](readme_resources/Visualisation_Demo.gif)
 
@@ -22,7 +25,6 @@ A report on the ways in which the software engineering process can be measured a
 
 # Requirements 
 NodeJS
-MariaDB
 
 ![Screenshot](readme_resources/Github_Access_Screenshot.PNG)
 ![Screenshot](readme_resources/Github_Access_Screenshot_2.PNG)

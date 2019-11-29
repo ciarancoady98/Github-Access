@@ -6,8 +6,6 @@ const inquirer = require("./src/inquirer");
 const parser = require("./src/parser");
 const diskAccess = require("./src/diskAccess");
 const textAnalysis = require("./src/textAnalysis");
-const CLI = require("clui");
-const Spinner = CLI.Spinner;
 
 async function fetchUserInfo(githubClient, textAnalysisClient, username) {
   let rawRepos = await github.getRepos(githubClient, username);
@@ -160,10 +158,11 @@ async function start() {
         });
     }
   }
-
-  //we are going to make a graph where every node is either a user or a commit, each user will be coloured blue, each commit will be coloured from green to red depending on sentiment
-  //get the users followers
-  //
+  console.log(
+    "------------------------------------------------------------\n" +
+      "Data collection and analytics successful!!\nNow open the client app to see it visualised!!\n" +
+      "------------------------------------------------------------"
+  );
 }
 
 start();

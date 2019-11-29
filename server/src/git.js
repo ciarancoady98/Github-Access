@@ -1,12 +1,5 @@
 const github = require("octonode");
 const inquirer = require("./inquirer");
-/*
-const CLI = require("clui");
-const Spinner = CLI.Spinner;
-const status = new Spinner("Authenticating you, please wait...");
-status.start();
-status.stop();
-*/
 
 //Authenticate login to increase rate limit
 async function authLogin(credentials) {
@@ -30,11 +23,6 @@ async function authLogin(credentials) {
 async function checkRateLimit(client) {
   return new Promise(resolve => {
     client.limit((err, left, max, reset) => {
-      // console.log("left : " + left); // 4999
-      // console.log("max : " + max); // 5000
-      // console.log(
-      //   "reset time: " + (new Date(reset * 1000) - new Date()) + "ms"
-      // );
       if (left == 0) {
         let delayInMilliseconds = new Date(reset * 1000) - new Date();
         console.log(

@@ -1,5 +1,4 @@
 const azureApiKeys = require("./azureApiKeys");
-const os = require("os");
 const CognitiveServicesCredentials = require("@azure/ms-rest-js");
 const TextAnalyticsAPIClient = require("@azure/cognitiveservices-textanalytics");
 const subscription_key = azureApiKeys.key;
@@ -22,17 +21,11 @@ async function createTextAnalysisClient() {
 }
 
 async function sentimentAnalysis(client, sentimentInput) {
-  // console.log("----------------------------------------------");
-  // console.log(sentimentInput);
-  // console.log("----------------------------------------------");
-
   const sentimentJson = {
     documents: sentimentInput
   };
   const sentimentResult = await client.sentiment({
     multiLanguageBatchInput: sentimentJson
   });
-  // // console.log(sentimentResult.documents);
-  // // console.log(os.EOL);
   return sentimentResult;
 }

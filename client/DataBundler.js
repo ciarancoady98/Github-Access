@@ -35,15 +35,15 @@ async function start() {
       console.log(error);
     });
 
+  //Setup the dataset to have all my followers connect to me
   parsedDataSet = parser.parseDatabaseForVisualisation(
     databaseContents,
     "ciarancoady98"
   );
-  //console.log(parsedDataSet);
 
   // let parsedDataSetString = util.inspect(parsedDataSet, {
   //   maxArrayLength: null
-  // }); //JSON.stringify(parsedDataSet);
+  // });
   let parsedDataSetString = JSON.stringify(parsedDataSet);
   await diskAccess.writeToFile(parsedDataSetString, "dataset");
 }

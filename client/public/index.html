@@ -36,15 +36,10 @@
         .id(function(d) {
           return d.id;
         })
-        // .distance(function(d) {
-        //   return d.distance;
-        // })
         .strength(0.8)
     )
     .force("charge", d3.forceManyBody())
     .force("center", d3.forceCenter(width / 2, height / 2));
-
-  //var graph =
 
   d3.json("/dataset.json", function(error, graph) {
     if (error) throw error;
@@ -76,7 +71,6 @@
         return d.sentiment == 2 ? 10 : 5;
       })
       .attr("fill", function(d) {
-        console.log(d);
         return d.sentiment == 2 ? "blue" : interpolate(d.sentiment);
       })
       .call(

@@ -14,7 +14,7 @@ Based on my research of existing data analytics from the github api, I thought a
 Contains the most up-to-date working version of the application. The application works in two parts, the server and the client.
 
 ### Note
-The initially github access part of this project is described by commit 358fd5036cd3b4fca2840a4d9d763178f31b01a1.
+The initial github access part of this project is described by commit 358fd5036cd3b4fca2840a4d9d763178f31b01a1.
 
 ## Server
 The server is a command line data gathering application written in nodejs. This application gathers data using the github api about a logged in user and their followers. It then analyses users commits and the sentiment of commit messages using microsoft text analysis. Then all data is stored to a mongodb database where it can later be used by the client.

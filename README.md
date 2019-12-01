@@ -13,7 +13,7 @@ Based on my research of existing data analytics from the github api, I thought a
 # Master Branch
 Contains the most up-to-date working version of the application. The application works in two parts, the server and the client.
 
-###Note
+### Note
 The initially github access part of this project is described by commit 358fd5036cd3b4fca2840a4d9d763178f31b01a1.
 
 ## Server

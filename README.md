@@ -52,4 +52,4 @@ Once the express server has launched we can then access the the webpage by searc
 ![Screenshot](readme_resources/Graph_With_Legend_Screenshot.PNG)<br/>
 
 # Measuring-Software-Engineering Branch 
-A report on the ways in which the software engineering process can be measured and assesed in terms of measurable data, an overview of the computationial platforms available to perform this work, the algorithmic approachs available, and the ethics concerns surrounding this kind of analytics.
+A report on the ways in which the software engineering process can be measured and assesed in terms of measurable data, an overview of the computational platforms available to perform this work, the algorithmic approachs available, and the ethics concerns surrounding this kind of analytics.
